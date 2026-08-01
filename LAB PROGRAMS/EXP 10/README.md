@@ -1,236 +1,98 @@
-# Experiment 10: Design of a Pushdown Automaton (PDA) for the Language L = {anbn | n = 0}
+# Experiment 10: Design and Simulation of a Pushdown Automaton (PDA) Using Simulator
 
 ## Aim
 
-To design a Pushdown Automaton (PDA) that accepts the language:
-
-\[
-L=\{a^n b^n \mid n\ge0\}
-\]
-
-where the number of **a's** is equal to the number of **b's**.
+To design and simulate a Pushdown Automaton (PDA) using a simulator to accept the language $L = \{w \mid w \in (a+b)^* \text{ and } n_a(w) = n_b(w)\}$.
 
 ---
 
 ## Problem Statement
 
-Design a Pushdown Automaton (PDA) that accepts the language:
-
-\[
-L=\{a^n b^n \mid n\ge0\}
-\]
-
-where **n** represents the number of **a's** and **b's** in the input string.
+Design a PDA that accepts strings over the alphabet $\{a, b\}$ where the number of 'a's equals the number of 'b's.
 
 ---
 
 ## Theory
 
-A **Pushdown Automaton (PDA)** is an extension of a Finite Automaton that uses a **stack** to store information.
-
-Unlike DFA and NFA, a PDA can recognize **Context-Free Languages (CFLs)** because it can count symbols using its stack.
-
-For the language
-
-\[
-L=\{a^n b^n \mid n\ge0\}
-\]
-
-the PDA works as follows:
-
-- Push one symbol onto the stack for every **a** read.
-- When **b** is encountered, pop one symbol from the stack for every **b**.
-- If the stack becomes empty exactly after all input symbols are processed, the string is accepted.
+A Pushdown Automaton (PDA) uses a stack to keep track of counts. For this language, the PDA pushes 'a' onto the stack when it reads 'a' and the stack is empty or has 'a' on top. It pops 'a' when it reads 'b'. Conversely, it pushes 'b' when it reads 'b' and the stack is empty or has 'b' on top, and pops 'b' when it reads 'a'. If the stack is empty (contains only the initial stack symbol) at the end of the input, the string is accepted.
 
 ---
 
-## Algorithm
+## States
 
-1. Start in the initial state.
-2. Push the stack bottom marker (`Z`).
-3. Read each `a` and push `A` onto the stack.
-4. When the first `b` is encountered, move to the next state.
-5. Pop one `A` for every `b`.
-6. If all input symbols are read and only the stack bottom marker remains, accept the string.
-7. Otherwise, reject the string.
+- **q0** â€“ Initial State (Push/Pop)
+- **q1** â€“ Accepting State
 
 ---
 
-## PDA Components
-
-### States
-
-- q0 – Initial state
-- q1 – Push state
-- q2 – Pop state
-- q3 – Accept state
-
-### Input Alphabet
+## Input Alphabet
 
 ```
-S = {a, b}
-```
-
-### Stack Alphabet
-
-```
-G = {A, Z}
-```
-
-where
-
-- Z = Stack bottom marker
-- A = Symbol pushed for every 'a'
-
----
-
-## Transition Function
-
-| Current State | Input | Stack Top | Next State | Stack Operation |
-|---------------|-------|-----------|------------|-----------------|
-| q0 | e | e | q1 | Push Z |
-| q1 | a | Z | q1 | Push A |
-| q1 | a | A | q1 | Push A |
-| q1 | b | A | q2 | Pop A |
-| q2 | b | A | q2 | Pop A |
-| q2 | e | Z | q3 | Accept |
-
----
-
-## Source Code
-
-```c
-#include <stdio.h>
-#include <string.h>
-
-int main()
-{
-    char str[100];
-    int i, len;
-    int countA = 0, countB = 0;
-
-    printf("Enter the string: ");
-    scanf("%s", str);
-
-    len = strlen(str);
-
-    i = 0;
-
-    while(i < len && str[i] == 'a')
-    {
-        countA++;
-        i++;
-    }
-
-    while(i < len && str[i] == 'b')
-    {
-        countB++;
-        i++;
-    }
-
-    if(i == len && countA == countB)
-        printf("String Accepted\n");
-    else
-        printf("String Rejected\n");
-
-    return 0;
-}
+Î£ = {a, b}
 ```
 
 ---
 
-## Sample Input 1
+## Transition Table
 
-```
-aaabbb
-```
-
-### Output
-
-```
-String Accepted
-```
-
----
-
-## Sample Input 2
-
-```
-aabb
-```
-
-### Output
-
-```
-String Accepted
-```
+| Present State | Input | Stack Top | Next State | Stack Action |
+|---------------|-------|-----------|------------|--------------|
+| â†’ q0 | a | Z0 | q0 | aZ0 |
+| q0 | b | Z0 | q0 | bZ0 |
+| q0 | a | a | q0 | aa |
+| q0 | b | b | q0 | bb |
+| q0 | a | b | q0 | Îµ |
+| q0 | b | a | q0 | Îµ |
+| q0 | Îµ | Z0 | q1 | Z0 |
 
 ---
 
-## Sample Input 3
+## Procedure
 
-```
-aaabb
-```
-
-### Output
-
-```
-String Rejected
-```
-
----
-
-## Explanation
-
-The program counts the number of **a's** followed by **b's**.
-
-If:
-
-- all `a`s appear before `b`s, and
-- the number of `a`s equals the number of `b`s,
-
-then the string belongs to the language **L = {anbn | n = 0}** and is accepted.
-
-Otherwise, it is rejected.
+1. Open the simulation software.
+2. Create the required states.
+3. Mark the initial state.
+4. Mark the accepting state(s).
+5. Add the transitions according to the transition table.
+6. Save the automaton.
+7. Test the automaton using different input strings.
+8. Verify whether the strings are accepted or rejected.
 
 ---
 
-## Time Complexity
+## Test Cases
 
-\[
-O(n)
-\]
-
-where **n** is the length of the input string.
+| Input String | Expected Result |
+|--------------|-----------------|
+| ab | Accepted |
+| ba | Accepted |
+| aabb | Accepted |
+| abba | Accepted |
+| aab | Rejected |
+| b | Rejected |
 
 ---
 
-## Space Complexity
+## Result
 
-\[
-O(1)
-\]
+The PDA successfully accepts strings where the number of 'a's equals the number of 'b's and rejects others.
 
 ---
 
 ## Applications
 
-- Compiler syntax analysis
-- Parsing Context-Free Languages
-- Expression evaluation
-- Programming language design
-- XML and HTML parsing
-- Automata Theory
+- Syntax analysis
+- Parsing context-free languages
+- Compiler design
 
 ---
 
 ## Conclusion
 
-The Pushdown Automaton successfully recognizes the language
+The automaton was successfully designed and simulated. It correctly accepts the specified valid strings and rejects all invalid strings, demonstrating the practical implementation of automata using simulation software.
 
-\[
-L=\{a^n b^n \mid n\ge0\}
-\]
+---
 
-by using a stack to match each **a** with a corresponding **b**. This demonstrates the power of PDAs in recognizing Context-Free Languages that cannot be recognized by finite automata.
+## Output
+
+![Output](EXP%2010%20-%20Output.png)
