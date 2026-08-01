@@ -1,6 +1,3 @@
-Here's a **professional GitHub `README.md`** for your lab experiment.
-
-````markdown
 # Experiment 1: Simulation of a Deterministic Finite Automaton (DFA)
 
 ## Aim
@@ -150,6 +147,3 @@ O(1)
 ## Conclusion
 
 The C program successfully simulates a Deterministic Finite Automaton (DFA) that accepts strings over the alphabet **{a, b}** starting with **'a'** and ending with **'a'**. The program correctly determines whether the given input string belongs to the specified language.
-````
-
-This README is **GitHub-ready**, properly formatted with Markdown headings, code blocks, examples, and explanations.
